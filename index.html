@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kavyashree — RTL & Embedded Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #05080f;
+    --bg2: #0c1220;
+    --bg3: #111827;
+    --border: #1f2d45;
+    --border2: #263548;
+    --text: #c9d9f0;
+    --muted: #5a7398;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --accent3: #34d399;
+    --hw: #f59e0b;
+    --sw: #818cf8;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Space Grotesk', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID LINES ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5,8,15,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent2);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent2); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0.85;
+  }
+  .hero h1 {
+    font-size: clamp(42px, 7vw, 72px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: #e8f2ff;
+    margin-bottom: 20px;
+  }
+  .hero h1 span { color: var(--accent2); }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  .hero-links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid;
+  }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #2563eb; border-color: #2563eb; }
+  .btn-ghost {
+    background: transparent;
+    border-color: var(--border2);
+    color: var(--text);
+  }
+  .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* ── SECTION ── */
+  section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  h2 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #e8f2ff;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+
+  /* ── ABOUT TABLE ── */
+  .about-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .about-table tr { border-bottom: 1px solid var(--border); }
+  .about-table tr:last-child { border-bottom: none; }
+  .about-table td {
+    padding: 14px 16px;
+    vertical-align: top;
+  }
+  .about-table td:first-child {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent2);
+    white-space: nowrap;
+    width: 180px;
+    padding-right: 24px;
+    letter-spacing: 0.05em;
+  }
+  .about-table td:last-child { color: var(--text); }
+  .about-table .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin: 2px 3px 2px 0;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+  }
+  .about-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── DOMAINS ── */
+  .domain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .domain-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .domain-card h3 {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--hw);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .domain-card.sw h3 { color: var(--sw); }
+  .domain-card ul { list-style: none; }
+  .domain-card li {
+    font-size: 14px;
+    color: var(--text);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .domain-card li:last-child { border-bottom: none; }
+  .domain-card li::before {
+    content: '›';
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* ── SKILLS ── */
+  .skills-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .skill-group { margin-bottom: 0; }
+  .skill-group-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .skill-group-label.hw { color: var(--hw); }
+  .skill-group-label.sw { color: var(--sw); }
+  .skill-group-label.other { color: var(--accent3); }
+  .skill-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid;
+    letter-spacing: 0.04em;
+  }
+  .badge-hw {
+    border-color: rgba(245,158,11,0.35);
+    color: #fbbf24;
+    background: rgba(245,158,11,0.07);
+  }
+  .badge-sw {
+    border-color: rgba(129,140,248,0.35);
+    color: #a5b4fc;
+    background: rgba(129,140,248,0.07);
+  }
+  .badge-other {
+    border-color: rgba(52,211,153,0.25);
+    color: #6ee7b7;
+    background: rgba(52,211,153,0.05);
+  }
+  .skills-other { margin-top: 24px; }
+
+  /* ── STATS ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--accent2);
+    display: block;
+  }
+  .stat-lbl {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+  .lang-bar { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .lang-bar-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .bar-track {
+    height: 8px;
+    background: var(--bg3);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 14px;
+  }
+  .bar-seg { height: 100%; transition: width 0.8s ease; }
+  .lang-legend { display: flex; flex-wrap: wrap; gap: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-family: var(--mono); color: var(--muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .stats-note { font-size: 12px; color: var(--muted); margin-top: 14px; font-family: var(--mono); }
+
+  /* ── PROJECTS ── */
+  .projects-grid { display: grid; gap: 14px; }
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .project-card:hover { border-color: var(--accent2); background: rgba(6,182,212,0.04); }
+  .project-name {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin-bottom: 6px;
+  }
+  .project-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .project-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .project-lang {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+  }
+  .project-arrow { color: var(--muted); font-size: 20px; flex-shrink: 0; margin-top: 2px; transition: transform 0.2s, color 0.2s; }
+  .project-card:hover .project-arrow { transform: translate(3px,-3px); color: var(--accent2); }
+  .project-stars { display: flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .projects-loading { font-family: var(--mono); font-size: 13px; color: var(--muted); padding: 20px 0; }
+
+  /* ── CONNECT ── */
+  .connect-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .connect-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .connect-card:hover { border-color: var(--accent2); }
+  .connect-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .connect-card h3 { font-size: 14px; font-weight: 500; color: #e8f2ff; margin-bottom: 2px; }
+  .connect-card p { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  footer a { color: var(--accent2); text-decoration: none; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fade-up 0.6s ease both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .domain-grid, .skills-cols, .stats-grid, .connect-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .hero { padding: 64px 0 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#home">kavya.sh</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#domains">Domains</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#stats">Stats</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page" id="home">
+  <div class="hero">
+    <div class="hero-tag fade-up">RTL Design &amp; Embedded Systems</div>
+    <h1 class="fade-up delay-1">Kavya<span>.</span></h1>
+    <p class="hero-sub fade-up delay-2">
+      Hardware engineer working across RTL design &amp; verification, embedded systems, firmware, and systems engineering. I bridge silicon and software.
+    </p>
+    <div class="hero-links fade-up delay-3">
+      <a class="btn btn-primary" href="https://github.com/kvsh2050" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.071 1.531 1.031 1.531 1.031.892 1.529 2.341 1.088 2.91.832.091-.647.349-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.254-.446-1.27.098-2.646 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.82c.85.004 1.705.114 2.504.336 1.909-1.294 2.748-1.025 2.748-1.025.546 1.376.202 2.392.1 2.646.64.698 1.029 1.591 1.029 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.335-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        GitHub
+      </a>
+      <a class="btn btn-ghost" href="https://linkedin.com/in/kavyashrer" target="_blank">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://kvsh2050.github.io/#home" target="_blank">Portfolio</a>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="page">
+  <section id="about">
+    <div class="section-label">01 — about</div>
+    <div class="about-wrap">
+      <table class="about-table">
+        <tr>
+          <td>name</td>
+          <td>Kavya</td>
+        </tr>
+        <tr>
+          <td>role</td>
+          <td>Engineer — Hardware Design &amp; Low-Level Software</td>
+        </tr>
+        <tr>
+          <td>focus areas</td>
+          <td>
+            <span class="tag">RTL Design &amp; Verification</span>
+            <span class="tag">Embedded Systems</span>
+            <span class="tag">Systems Engineering</span>
+            <span class="tag">Firmware</span>
+          </td>
+        </tr>
+        <tr>
+          <td>ask me about</td>
+          <td>FPGA &nbsp;·&nbsp; Verilog / SystemVerilog &nbsp;·&nbsp; C &nbsp;·&nbsp; Embedded Systems &nbsp;·&nbsp; Linux Kernel &nbsp;·&nbsp; RISC-V</td>
+        </tr>
+        <tr>
+          <td>currently</td>
+          <td>Open to opportunities in hardware design, RTL &amp; embedded systems</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- CORE DOMAINS -->
+<div class="page">
+  <section id="domains">
+    <div class="section-label">02 — core domains</div>
+    <div class="domain-grid">
+      <div class="domain-card">
+        <h3>Hardware &amp; RTL</h3>
+        <ul>
+          <li>FPGA Design (Verilog / VHDL)</li>
+          <li>RTL Verification (SystemVerilog / UVM)</li>
+          <li>RISC-V RV32I ISA</li>
+          <li>ARM Cortex-A / Cortex-M Architecture</li>
+          <li>Device Tree &amp; Board Support Packages</li>
+        </ul>
+      </div>
+      <div class="domain-card sw">
+        <h3>Software &amp; Firmware</h3>
+        <ul>
+          <li>Bare-metal C Firmware</li>
+          <li>RTOS &amp; Interrupt-driven Systems</li>
+          <li>Linux Kernel &amp; Driver Development</li>
+          <li>Systems Engineering</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SKILLS -->
+<div class="page">
+  <section id="skills">
+    <div class="section-label">03 — skills</div>
+    <div class="skills-cols">
+      <div class="skill-group">
+        <div class="skill-group-label hw">Hardware — Core</div>
+        <div class="skill-badges">
+          <span class="badge badge-hw">Verilog</span>
+          <span class="badge badge-hw">SystemVerilog</span>
+          <span class="badge badge-hw">VHDL</span>
+          <span class="badge badge-hw">UVM</span>
+          <span class="badge badge-hw">FPGA</span>
+          <span class="badge badge-hw">RISC-V</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label sw">Software — Core</div>
+        <div class="skill-badges">
+          <span class="badge badge-sw">C</span>
+          <span class="badge badge-sw">C++</span>
+          <span class="badge badge-sw">Linux</span>
+          <span class="badge badge-sw">Bash</span>
+          <span class="badge badge-sw">Python</span>
+          <span class="badge badge-sw">Git</span>
+          <span class="badge badge-sw">Docker</span>
+        </div>
+      </div>
+    </div>
+    <div class="skills-other" style="margin-top:28px;">
+      <div class="skill-group-label other" style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--accent3);">Other Interests &amp; Hobbies</div>
+      <div class="skill-badges">
+        <span class="badge badge-other">TensorFlow</span>
+        <span class="badge badge-other">PyTorch</span>
+        <span class="badge badge-other">scikit-learn</span>
+        <span class="badge badge-other">OpenCV</span>
+        <span class="badge badge-other">MATLAB</span>
+        <span class="badge badge-other">pandas</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- STATS -->
+<div class="page">
+  <section id="stats">
+    <div class="section-label">04 — github stats</div>
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card"><span class="stat-num" id="stat-repos">—</span><div class="stat-lbl">public repos</div></div>
+      <div class="stat-card"><span class="stat-num" id="stat-stars">—</span><div class="stat-lbl">total stars</div></div>
+      <div class="stat-card"><span class="stat-num" id="stat-followers">—</span><div class="stat-lbl">followers</div></div>
+    </div>
+    <div class="lang-bar">
+      <div class="lang-bar-label">Top Languages (by repo count)</div>
+      <div class="bar-track" id="lang-bar-track">
+        <div class="bar-seg" style="background:#3b82f6;width:0%" id="bar-0"></div>
+        <div class="bar-seg" style="background:#f59e0b;width:0%" id="bar-1"></div>
+        <div class="bar-seg" style="background:#818cf8;width:0%" id="bar-2"></div>
+        <div class="bar-seg" style="background:#34d399;width:0%" id="bar-3"></div>
+        <div class="bar-seg" style="background:#f87171;width:0%" id="bar-4"></div>
+      </div>
+      <div class="lang-legend" id="lang-legend"></div>
+      <div class="stats-note" id="stats-note">Fetching live stats from GitHub API…</div>
+    </div>
+  </section>
+</div>
+
+<!-- PROJECTS -->
+<div class="page">
+  <section id="projects">
+    <div class="section-label">05 — starred projects</div>
+    <div class="projects-grid" id="projects-grid">
+      <p class="projects-loading">Fetching starred repositories from GitHub…</p>
+    </div>
+  </section>
+</div>
+
+<!-- CONNECT -->
+<div class="page">
+  <section id="connect">
+    <div class="section-label">06 — let's connect</div>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:28px;max-width:520px;">
+      Open to collaborating on <strong style="color:var(--text)">hardware design</strong>, <strong style="color:var(--text)">FPGA &amp; RTL projects</strong>, embedded systems, and open-source work. Hardware or software — let's build something real.
+    </p>
+    <div class="connect-grid">
+      <a class="connect-card" href="https://linkedin.com/in/kavyashrer" target="_blank">
+        <div class="connect-icon" style="background:rgba(0,119,181,0.12);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#0077B5"><path d="M20.447 20.452H16.89v-5.569c0-1.327-.024-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.346V9h3.414v1.561h.046c.476-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a1.98 1.98 0 01-1.98-1.981 1.98 1.98 0 011.98-1.98 1.98 1.98 0 011.98 1.98 1.98 1.98 0 01-1.98 1.981zM7.119 20.452H3.553V9h3.566v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </div>
+        <div>
+          <h3>LinkedIn</h3>
+          <p>kavyashrer</p>
+        </div>
+      </a>
+      <a class="connect-card" href="https://github.com/kvsh2050" target="_blank">
+        <div class="connect-icon" style="background:rgba(255,255,255,0.05);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--text)"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.071 1.531 1.031 1.531 1.031.892 1.529 2.341 1.088 2.91.832.091-.647.349-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.254-.446-1.27.098-2.646 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.82c.85.004 1.705.114 2.504.336 1.909-1.294 2.748-1.025 2.748-1.025.546 1.376.202 2.392.1 2.646.64.698 1.029 1.591 1.029 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.335-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        </div>
+        <div>
+          <h3>GitHub</h3>
+          <p>kvsh2050</p>
+        </div>
+      </a>
+      <a class="connect-card" href="mailto:email@google.com">
+        <div class="connect-icon" style="background:rgba(234,67,53,0.1);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#EA4335"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div>
+          <h3>Email</h3>
+          <p>Send a message</p>
+        </div>
+      </a>
+      <a class="connect-card" href="https://kvsh2050.github.io/#home" target="_blank">
+        <div class="connect-icon" style="background:rgba(6,182,212,0.1);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div>
+          <h3>Portfolio</h3>
+          <p>kvsh2050.github.io</p>
+        </div>
+      </a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="page">
+    <p>built by Kavya &nbsp;·&nbsp; <a href="https://github.com/kvsh2050" target="_blank">github.com/kvsh2050</a> &nbsp;·&nbsp; <span id="footer-year"></span></p>
+  </div>
+</footer>
+
+<script>
+const USERNAME = 'kvsh2050';
+const COLORS = ['#3b82f6','#f59e0b','#818cf8','#34d399','#f87171','#e879f9','#fb923c'];
+
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+async function fetchStats() {
+  try {
+    const res = await fetch(`https://api.github.com/users/${USERNAME}`);
+    if (!res.ok) throw new Error('API error');
+    const d = await res.json();
+    document.getElementById('stat-repos').textContent = d.public_repos ?? '—';
+    document.getElementById('stat-followers').textContent = d.followers ?? '—';
+  } catch(e) {
+    ['stat-repos','stat-followers'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
+  }
+}
+
+async function fetchLangs() {
+  try {
+    let page = 1, allRepos = [];
+    while (true) {
+      const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&page=${page}`);
+      if (!res.ok) break;
+      const repos = await res.json();
+      if (!repos.length) break;
+      allRepos = allRepos.concat(repos);
+      page++;
+      if (repos.length < 100) break;
+    }
+
+    const langCount = {};
+    let totalStars = 0;
+    allRepos.forEach(r => {
+      if (r.language) langCount[r.language] = (langCount[r.language] || 0) + 1;
+      totalStars += r.stargazers_count || 0;
+    });
+
+    document.getElementById('stat-stars').textContent = totalStars;
+
+    const sorted = Object.entries(langCount).sort((a,b) => b[1]-a[1]).slice(0,5);
+    const total = sorted.reduce((s,[,v]) => s+v, 0);
+
+    const track = document.getElementById('lang-bar-track');
+    track.innerHTML = '';
+    const legend = document.getElementById('lang-legend');
+    legend.innerHTML = '';
+
+    sorted.forEach(([lang, count], i) => {
+      const pct = Math.round((count / total) * 100);
+      const seg = document.createElement('div');
+      seg.className = 'bar-seg';
+      seg.style.cssText = `background:${COLORS[i]};width:${pct}%`;
+      track.appendChild(seg);
+
+      const item = document.createElement('div');
+      item.className = 'legend-item';
+      item.innerHTML = `<span class="legend-dot" style="background:${COLORS[i]}"></span>${lang} <span style="opacity:.5">${pct}%</span>`;
+      legend.appendChild(item);
+    });
+
+    document.getElementById('stats-note').textContent = `Live data · ${allRepos.length} repos scanned`;
+  } catch(e) {
+    document.getElementById('stats-note').textContent = 'Could not load language stats (API rate limit may apply)';
+  }
+}
+
+async function fetchStarred() {
+  const grid = document.getElementById('projects-grid');
+  try {
+    const res = await fetch(`https://api.github.com/users/${USERNAME}/starred?per_page=8`);
+    if (!res.ok) throw new Error('API error');
+    const repos = await res.json();
+    if (!repos.length) {
+      grid.innerHTML = '<p class="projects-loading">No starred repos found.</p>';
+      return;
+    }
+    grid.innerHTML = '';
+    repos.slice(0, 6).forEach(r => {
+      const card = document.createElement('a');
+      card.className = 'project-card';
+      card.href = r.html_url;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      const tags = [r.language, ...(r.topics||[]).slice(0,3)].filter(Boolean);
+      card.innerHTML = `
+        <div>
+          <div class="project-name">${escHtml(r.full_name)}</div>
+          <div class="project-desc">${escHtml(r.description || 'No description')}</div>
+          <div class="project-meta">
+            ${tags.map(t=>`<span class="project-lang">${escHtml(t)}</span>`).join('')}
+            <span class="project-stars">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              ${r.stargazers_count}
+            </span>
+          </div>
+        </div>
+        <div class="project-arrow">↗</div>`;
+      grid.appendChild(card);
+    });
+  } catch(e) {
+    grid.innerHTML = `
+      <a class="project-card" href="https://github.com/kvsh2050/verilog-hdlbits" target="_blank" rel="noopener">
+        <div>
+          <div class="project-name">kvsh2050/verilog-hdlbits</div>
+          <div class="project-desc">380+ HDL solutions — wires to Lemmings FSM</div>
+          <div class="project-meta"><span class="project-lang">Verilog</span><span class="project-lang">FPGA</span></div>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>`;
+  }
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+fetchStats();
+fetchLangs();
+fetchStarred();
+</script>
+</body>
+</html>
